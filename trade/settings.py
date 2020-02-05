@@ -24,7 +24,7 @@ SECRET_KEY = 'p_z$(=%stock(7446n7w@l$2i147w5db9en3sv%%a8g_j!1+iwk_yv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['47.56.128.21']
 
 # Application definition
 
