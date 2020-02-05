@@ -1,6 +1,9 @@
 import numpy
 
 from trade.stock.trade_strategy_base import TradeStrategyBase
+import logging
+
+log = logging.getLogger('mydjango')
 
 
 class TradeStrategySimple(TradeStrategyBase):
@@ -30,22 +33,23 @@ class TradeStrategySimple(TradeStrategyBase):
         :return:
         """
         if self.__curr_price == 0:
-            print("初始交易价格")
+            log.info("初始交易价格")
         elif int_curr_price >= self.__curr_price + 1:
-            self.__empty_price = numpy.append(self.__empty_price, [a for a in range(self.__curr_price, int_curr_price, )])
-            print("{}->{}卖出空仓+{},当前空仓持有{},盈亏{}".format(self.__curr_price, int_curr_price, self.__unit_count,
-                                                       len(self.__empty_price),
-                                                       self.__calculation_profit(self.__curr_price,
-                                                                                 self.__empty_price.mean(),
-                                                                                 len(self.__empty_price))))
+            self.__empty_price = numpy.append(self.__empty_price,
+                                              [a for a in range(self.__curr_price, int_curr_price, )])
+            log.info("{}->{}卖出空仓+{},当前空仓持有{},盈亏{}".format(self.__curr_price, int_curr_price, self.__unit_count,
+                                                          len(self.__empty_price),
+                                                          self.__calculation_profit(self.__curr_price,
+                                                                                    self.__empty_price.mean(),
+                                                                                    len(self.__empty_price))))
         elif int_curr_price <= self.__curr_price - 1:
             self.__more_price = numpy.append(self.__more_price,
-                                          [a for a in range(int_curr_price + 1, self.__curr_price + 1)])
-            print("{}->{}买入多仓+{},当前多仓持有{},盈亏{}".format(self.__curr_price, int_curr_price, self.__unit_count,
-                                                       len(self.__more_price),
-                                                       self.__calculation_profit(self.__more_price.mean(),
-                                                                                 self.__curr_price,
-                                                                                 len(self.__more_price))))
+                                             [a for a in range(int_curr_price + 1, self.__curr_price + 1)])
+            log.info("{}->{}买入多仓+{},当前多仓持有{},盈亏{}".format(self.__curr_price, int_curr_price, self.__unit_count,
+                                                          len(self.__more_price),
+                                                          self.__calculation_profit(self.__more_price.mean(),
+                                                                                    self.__curr_price,
+                                                                                    len(self.__more_price))))
 
         self.__curr_price = int_curr_price
 
@@ -56,7 +60,7 @@ class TradeStrategySimple(TradeStrategyBase):
             if profit > 1:
                 self.__profit += profit
                 self.__more_price = numpy.empty([0, 0])
-                print("平仓多仓{},价格{},实现盈亏{}".format(self.__more_price, self.__curr_price, self.__profit))
+                log.info("平仓多仓{},价格{},实现盈亏{}".format(self.__more_price, self.__curr_price, self.__profit))
 
         if len(self.__empty_price) >= self.__close_position:
             profit = self.__calculation_profit(self.__curr_price, self.__empty_price.mean(),
@@ -64,7 +68,7 @@ class TradeStrategySimple(TradeStrategyBase):
             if profit > 1:
                 self.__profit += profit
                 self.__empty_price = numpy.empty([0, 0])
-                print("平仓空仓{},价格{},实现盈亏{}".format(self.__empty_price, self.__curr_price, self.__profit))
+                log.info("平仓空仓{},价格{},实现盈亏{}".format(self.__empty_price, self.__curr_price, self.__profit))
 
     def __calculation_profit(self, sell, buy, count):
         """

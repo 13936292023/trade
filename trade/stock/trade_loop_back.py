@@ -1,3 +1,8 @@
+import logging
+
+log = logging.getLogger('mydjango')
+
+
 class TradeLoopBack(object):
     """
         交易回测系统
@@ -36,4 +41,4 @@ class TradeLoopBack(object):
                 # 卖出策略执行
                 self.trade_strategy.sell_strategy(ind, day, self.trade_days)
 
-        print(self.trade_strategy)
+        log.info(self.trade_strategy)

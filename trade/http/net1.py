@@ -1,5 +1,6 @@
 import ssl
 import sys
+import threading
 
 import websocket
 import logging
@@ -7,16 +8,13 @@ import json
 
 from trade.stock.trade_strategy_simple import TradeStrategySimple
 
+log = logging.getLogger('mydjango')
 """
 
     apiKey 57b9858d-f489-41a0-91b9-b926742b30be
     secretKey 61792E270589F5ACEE74259EE584FFA6
 
 """
-log = logging.Logger("auto.net")
-handler = logging.StreamHandler(sys.stderr)
-handler.setLevel(logging.DEBUG)
-log.addHandler(handler)
 
 ts = TradeStrategySimple()
 
@@ -45,10 +43,15 @@ def on_open(ws):
         ",\"id\": 1}")
 
 
-websocket.enableTrace(True)
-websocket.WebSocketApp("wss://stream.binancefuture.com/ws/btcusdt@markPrice",
-                       None,
-                       on_open,
-                       on_message,
-                       on_error) \
-    .run_forever(sslopt={"check_hostname": False, "cert_reqs": ssl.CERT_NONE})
+class SocketThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+    def run(self) -> None:
+        websocket.enableTrace(True)
+        websocket.WebSocketApp("wss://stream.binancefuture.com/ws/btcusdt@aggTrade",
+                               None,
+                               on_open,
+                               on_message,
+                               on_error) \
+            .run_forever(sslopt={"check_hostname": False, "cert_reqs": ssl.CERT_NONE})

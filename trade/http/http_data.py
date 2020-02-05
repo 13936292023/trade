@@ -1,7 +1,9 @@
 import http.client
 import ssl
 import json
+import logging
 
+log = logging.getLogger('mydjango')
 context = ssl._create_default_https_context()
 context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
