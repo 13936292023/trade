@@ -1,6 +1,7 @@
 import ssl
 import sys
 import threading
+import zlib
 
 import websocket
 import logging
@@ -19,12 +20,22 @@ log = logging.getLogger('mydjango')
 ts = TradeStrategySimple()
 
 
+def inflate(data):
+    decompress = zlib.decompressobj(
+        -zlib.MAX_WBITS  # see above
+    )
+    inflated = decompress.decompress(data)
+    inflated += decompress.flush()
+    return inflated
+
+
 def on_message(ws, data):
-    obj = json.loads(data)
-    if obj['e'] == 'aggTrade':
-        price = float(obj['p'])
-        ts.buy_strategy(int(price))
-        ts.sell_strategy()
+    obj = json.loads(inflate(data))
+    if obj['table'] == 'swap/trade':
+        for a in obj['data']:
+            price = float(a['price'])
+            ts.buy_strategy(int(price))
+            ts.sell_strategy()
 
 
 def on_error(ws, data):
@@ -38,9 +49,7 @@ def on_close():
 def on_open(ws):
     log.info("### open ###")
     ws.send(
-        "{\"method\": \"SUBSCRIBE\",\"params\":"
-        "[\"btcusdt@aggTrade\"]"
-        ",\"id\": 1}")
+        "{\"op\": \"subscribe\", \"args\": [\"swap/mark_price:BTC-USDT-SWAP\", \"swap/trade:BTC-USDT-SWAP\"]}")
 
 
 class SocketThread(threading.Thread):
@@ -49,7 +58,7 @@ class SocketThread(threading.Thread):
 
     def run(self) -> None:
         websocket.enableTrace(True)
-        websocket.WebSocketApp("wss://stream.binancefuture.com/ws/btcusdt@aggTrade",
+        websocket.WebSocketApp("ws://47.56.128.21:38043/ws/v3",
                                None,
                                on_open,
                                on_message,
