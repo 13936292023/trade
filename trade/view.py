@@ -43,24 +43,40 @@ def t(request):
         {
             'holding': [
                 {
-                    'avail_position': '0',
-                    'avg_cost': '9817.0',
-                    'last': '9841.2',
+                    'avail_position': '30',
+                    'avg_cost': '9845.3',
+                    'last': '9839.0',
                     'leverage': '100.00',
                     'liquidation_price': '0.0',
                     'maint_margin_ratio': '0.0050',
-                    'margin': '0.00',
-                    'position': '1',
-                    'realized_pnl': '0.00',
+                    'margin': '0.29',
+                    'position': '30',
+                    'realized_pnl': '-0.01',
                     'settled_pnl': '0.00',
-                    'settlement_price': '9817.0',
+                    'settlement_price': '9845.3',
+                    'side': 'long',
+                    'timestamp': '2020-02-08T15:18:29.504Z'
+                },
+                {
+                    'avail_position': '24',
+                    'avg_cost': '9850.5',
+                    'last': '9839.0',
+                    'leverage': '100.00',
+                    'liquidation_price': '0.0',
+                    'maint_margin_ratio': '0.0050',
+                    'margin': '0.23',
+                    'position': '24',
+                    'realized_pnl': '-0.01',
+                    'settled_pnl': '0.00',
+                    'settlement_price': '9850.5',
                     'side': 'short',
-                    'timestamp': '2020-02-08T14:09:00.557Z'
+                    'timestamp': '2020-02-08T15:18:29.504Z'
                 }
             ],
             'instrument_id': 'BTC-USDT-SWAP',
             'margin_mode': 'crossed',
-            'timestamp': '2020-02-08T14:09:00.557Z'
+            'timestamp': '2020-02-08T15:18:29.504Z'
         }
     ]
+
     return JsonResponse(sw.get_order_list('0', c.BTC_USDT_SWAP))

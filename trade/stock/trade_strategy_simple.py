@@ -47,11 +47,14 @@ class TradeStrategySimple(TradeStrategyBase):
             for d in data:
                 if d['instrument_id'] == c.BTC_USDT_SWAP:
                     for h in d['holding']:
-                        if float(h['realized_pnl']) >= 0.01:
-                            if h['side'] == 'long':
-                                ot, p = 3, float(h['last']) + 1
-                            else:
-                                ot, p = 4, float(h['last'])
+                        la = float(h['last'])
+                        ac = float(h['avg_cost'])
+                        po = float(h['position']) * 0.0001
+                        if h['side'] == 'long':
+                            ot, p, i = 3, la + 1, (la - ac) * po
+                        else:
+                            ot, p, i = 4, la, (ac - la) * po
+                        if i >= 0.01:
                             order.append(
                                 {"order_type": "1", "client_oid": utils.create_id(), "price": int(p),
                                  "size": h['avail_position'],
