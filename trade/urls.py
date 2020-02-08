@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', view.index),
     path('start/', view.start),
-    path('cancel/', view.cancel)
+    path('cancel/', view.cancel),
+    path('t/', view.t)
 ]
