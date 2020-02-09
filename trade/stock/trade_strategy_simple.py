@@ -60,11 +60,12 @@ class TradeStrategySimple(TradeStrategyBase):
                         la = float(h['last'])
                         ac = float(h['avg_cost'])
                         po = float(h['position']) * 0.0001
+                        ro = int(po / 50) + 1
                         if h['side'] == 'long':
                             ot, p, i = 3, la + 1, (la - ac) * po
                         else:
                             ot, p, i = 4, la, (ac - la) * po
-                        if i >= 0.01:
+                        if i >= 0.01 * ro:
                             order.append(
                                 {"order_type": "1", "client_oid": utils.create_id(), "price": int(p),
                                  "size": h['avail_position'],
