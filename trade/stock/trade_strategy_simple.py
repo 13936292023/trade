@@ -41,7 +41,7 @@ class TradeStrategySimple(TradeStrategyBase):
         elif self.__mark_price > int_curr_price:
             long = [a for a in range(int_curr_price - self.__offset, self.__mark_price - self.__offset)]
         elif self.__mark_price < int_curr_price:
-            short = [a for a in range(int_curr_price + 1 + self.__offset, int_curr_price + 1 + self.__offset)]
+            short = [a for a in range(self.__mark_price + 1 + self.__offset, int_curr_price + 1 + self.__offset)]
 
         self.__mark_price = int_curr_price
 
