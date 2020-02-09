@@ -1,10 +1,10 @@
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from okex import utils
 from okex.swap_api import SwapAPI
 from trade.stock.trade_strategy_base import TradeStrategyBase
 import logging
 import okex.consts as c
-from apscheduler.schedulers.blocking import BlockingScheduler
 
 log = logging.getLogger('mydjango')
 
@@ -18,13 +18,13 @@ class TradeStrategySimple(TradeStrategyBase):
 
     def __init__(self):
         self.__mark_price = 0
-        self.__offset = 100
+        self.__offset = 0
         self.__sw = SwapAPI(c.api_key, c.secret_key, c.passphrase)
 
         # 该示例代码生成了一个BlockingScheduler调度器，使用了默认的任务存储MemoryJobStore，以及默认的执行器ThreadPoolExecutor，并且最大线程数为10。
 
         # BlockingScheduler：在进程中运行单个任务，调度器是唯一运行的东西
-        scheduler = BlockingScheduler()
+        scheduler = BackgroundScheduler()
         # 采用阻塞的方式
 
         # 采用固定时间间隔（interval）的方式，每隔5秒钟执行一次
@@ -41,7 +41,7 @@ class TradeStrategySimple(TradeStrategyBase):
         elif self.__mark_price > int_curr_price:
             long = [a for a in range(int_curr_price - self.__offset, self.__mark_price - self.__offset)]
         elif self.__mark_price < int_curr_price:
-            short = [a for a in range(self.__mark_price + 1 + self.__offset, int_curr_price + 1 + self.__offset)]
+            short = [a for a in range(int_curr_price + 1 + self.__offset, int_curr_price + 1 + self.__offset)]
 
         self.__mark_price = int_curr_price
 
