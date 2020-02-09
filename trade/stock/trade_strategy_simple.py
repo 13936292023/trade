@@ -36,15 +36,14 @@ class TradeStrategySimple(TradeStrategyBase):
     def buy_strategy(self, int_curr_price):
         long, short = [], []
         if self.__mark_price == 0:
-            long, short = [b for b in range(int_curr_price - 10 - self.__offset, int_curr_price - self.__offset)], \
-                          [b for b in range(int_curr_price + self.__offset, int_curr_price + 10 + self.__offset)]
+            long, short = [int_curr_price], [int_curr_price + 1]
         elif self.__mark_price > int_curr_price:
-            long = [a for a in range(int_curr_price - self.__offset, self.__mark_price - self.__offset)]
+            short = [a for a in range(int_curr_price - self.__offset + 1, self.__mark_price - self.__offset + 1)]
+            long = [int_curr_price - 1]
         elif self.__mark_price < int_curr_price:
-            short = [a for a in range(self.__mark_price + 1 + self.__offset, int_curr_price + 1 + self.__offset)]
-
+            short = [int_curr_price + 1]
+            long = [a for a in range(self.__mark_price - self.__offset + 1, int_curr_price - self.__offset + 1)]
         self.__mark_price = int_curr_price
-
         return long, short
 
     def sell_strategy(self, data):
