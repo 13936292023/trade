@@ -64,7 +64,7 @@ class TradeStrategySimple(TradeStrategyBase):
                             ot, p, i = 3, la + 1, (la - ac) * po
                         else:
                             ot, p, i = 4, la, (ac - la) * po
-                        if i >= 0.01 * ro:
+                        if i >= 0.01 * ro + 0.02:
                             order.append(
                                 {"order_type": "1", "client_oid": utils.create_id(), "price": int(p),
                                  "size": h['avail_position'],
