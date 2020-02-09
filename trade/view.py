@@ -3,8 +3,6 @@ import time
 
 from django.http.response import JsonResponse
 
-from binance_f import RequestClient
-from binance_f.base.printobject import PrintBasic
 from okex import utils
 from okex.swap_api import SwapAPI
 from trade.http import net
